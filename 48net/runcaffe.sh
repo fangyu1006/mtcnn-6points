@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
-export PYTHONPATH=$PYTHONPATH:/home/cmcc/caffe-master/examples/mtcnn-caffe/48net
+export PYTHONPATH=$PYTHONPATH:~/FY/mtcnn-caffe/48net
+
 set -e
-~/caffe-master/build/tools/caffe train \
+~/libraries/caffe/build/tools/caffe train \
 	 --solver=./solver.prototxt \
-  	 #--weights=./48net-only-cls.caffemodel
+  	 #--weights=./48net.caffemodel

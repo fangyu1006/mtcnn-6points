@@ -170,20 +170,22 @@ def filter_face_48net(cls_prob,roi,pts,rectangles,width,height,threshold):
     w   = x2-x1
     h   = y2-y1
     pts0= np.array([(w*pts[pick,0]+x1)[0]]).T
-    pts1= np.array([(h*pts[pick,5]+y1)[0]]).T
-    pts2= np.array([(w*pts[pick,1]+x1)[0]]).T
-    pts3= np.array([(h*pts[pick,6]+y1)[0]]).T
-    pts4= np.array([(w*pts[pick,2]+x1)[0]]).T
-    pts5= np.array([(h*pts[pick,7]+y1)[0]]).T
-    pts6= np.array([(w*pts[pick,3]+x1)[0]]).T
-    pts7= np.array([(h*pts[pick,8]+y1)[0]]).T
-    pts8= np.array([(w*pts[pick,4]+x1)[0]]).T
+    pts1= np.array([(h*pts[pick,1]+y1)[0]]).T
+    pts2= np.array([(w*pts[pick,2]+x1)[0]]).T
+    pts3= np.array([(h*pts[pick,3]+y1)[0]]).T
+    pts4= np.array([(w*pts[pick,4]+x1)[0]]).T
+    pts5= np.array([(h*pts[pick,5]+y1)[0]]).T
+    pts6= np.array([(w*pts[pick,6]+x1)[0]]).T
+    pts7= np.array([(h*pts[pick,7]+y1)[0]]).T
+    pts8= np.array([(w*pts[pick,8]+x1)[0]]).T
     pts9= np.array([(h*pts[pick,9]+y1)[0]]).T
+    pts10= np.array([(h*pts[pick,10]+x1)[0]]).T
+    pts11= np.array([(h*pts[pick,11]+y1)[0]]).T
     x1  = np.array([(x1+dx1*w)[0]]).T
     y1  = np.array([(y1+dx2*h)[0]]).T
     x2  = np.array([(x2+dx3*w)[0]]).T
     y2  = np.array([(y2+dx4*h)[0]]).T
-    rectangles=np.concatenate((x1,y1,x2,y2,sc,pts0,pts1,pts2,pts3,pts4,pts5,pts6,pts7,pts8,pts9),axis=1)
+    rectangles=np.concatenate((x1,y1,x2,y2,sc,pts0,pts1,pts2,pts3,pts4,pts5,pts6,pts7,pts8,pts9,pts10,pts11),axis=1)
     pick = []
     for i in range(len(rectangles)):
 	x1 = int(max(0     ,rectangles[i][0]))
@@ -192,7 +194,7 @@ def filter_face_48net(cls_prob,roi,pts,rectangles,width,height,threshold):
 	y2 = int(min(height,rectangles[i][3]))
 	if x2>x1 and y2>y1:
 	    pick.append([x1,y1,x2,y2,rectangles[i][4],
-			 rectangles[i][5],rectangles[i][6],rectangles[i][7],rectangles[i][8],rectangles[i][9],rectangles[i][10],rectangles[i][11],rectangles[i][12],rectangles[i][13],rectangles[i][14]])
+			 rectangles[i][5],rectangles[i][6],rectangles[i][7],rectangles[i][8],rectangles[i][9],rectangles[i][10],rectangles[i][11],rectangles[i][12],rectangles[i][13],rectangles[i][14],rectangles[i][15],rectangles[i][16]])
     return NMS(pick,0.7,'iom')
 '''
 Function:

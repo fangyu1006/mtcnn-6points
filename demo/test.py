@@ -1,6 +1,6 @@
 import sys
 sys.path.append('.')
-sys.path.append('/home/cmcc/caffe-master/python')
+sys.path.append('~/libraries/caffe/python')
 import tools_matrix as tools
 import caffe
 import cv2
@@ -20,7 +20,7 @@ net_48 = caffe.Net(deploy,caffemodel,caffe.TEST)
 
 def detectFace(img_path,threshold):
     img = cv2.imread(img_path)
-    caffe_img = (img.copy()-127.5)/128
+    caffe_img = (img.copy()-127.5)/127.5
     origin_h,origin_w,ch = caffe_img.shape
     scales = tools.calculateScales(img)
     out = []
@@ -60,6 +60,7 @@ def detectFace(img_path,threshold):
     cls_prob = out['prob1']
     roi_prob = out['conv5-2']
     rectangles = tools.filter_face_24net(cls_prob,roi_prob,rectangles,origin_w,origin_h,threshold[1])
+    print(rectangles)
     
     if len(rectangles)==0:
         return rectangles
@@ -68,29 +69,39 @@ def detectFace(img_path,threshold):
     for rectangle in rectangles:
         crop_img = caffe_img[int(rectangle[1]):int(rectangle[3]), int(rectangle[0]):int(rectangle[2])]
         scale_img = cv2.resize(crop_img,(48,48))
+        #cv2.imshow("test",scale_img)
+        #cv2.waitKey()
         scale_img = np.swapaxes(scale_img, 0, 2)
+        #scale_img = (scale_img - 127.5)/127.5
         net_48.blobs['data'].data[crop_number] =scale_img 
         crop_number += 1
     out = net_48.forward()
+    #print(out)
     cls_prob = out['prob1']
-    roi_prob = out['conv6-2']
-    pts_prob = out['conv6-3']
+    print(cls_prob)
+    roi_prob = out['fc6-2']
+    print(roi_prob)
+    pts_prob = out['fc6-3']
+    print(pts_prob)
     rectangles = tools.filter_face_48net(cls_prob,roi_prob,pts_prob,rectangles,origin_w,origin_h,threshold[2])
-
+    
     return rectangles
 
 threshold = [0.6,0.6,0.7]
-imgpath = ""
+imgpath = "test1.jpg"
 rectangles = detectFace(imgpath,threshold)
+print(rectangles)
 img = cv2.imread(imgpath)
 draw = img.copy()
 for rectangle in rectangles:
     cv2.putText(draw,str(rectangle[4]),(int(rectangle[0]),int(rectangle[1])),cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0))
     cv2.rectangle(draw,(int(rectangle[0]),int(rectangle[1])),(int(rectangle[2]),int(rectangle[3])),(255,0,0),1)
-    for i in range(5,15,2):
+    
+    for i in range(5,17,2):
     	cv2.circle(draw,(int(rectangle[i+0]),int(rectangle[i+1])),2,(0,255,0))
+    
 cv2.imshow("test",draw)
-cv2.waitKey()
+cv2.waitKey(0)
 cv2.imwrite('test.jpg',draw)
 
 

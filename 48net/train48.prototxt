@@ -253,7 +253,7 @@ layer {
   top: "ClassifyLoss"
   propagate_down: 1
   propagate_down: 0
-  loss_weight: 1
+  loss_weight: 0.5
 }
 layer {
   name: "cls_Acc"
@@ -315,7 +315,7 @@ layer {
     decay_mult: 1
   }
   inner_product_param {
-    num_output: 10
+    num_output: 12
     weight_filler {
      type: "xavier"
     }
@@ -331,7 +331,7 @@ layer {
   bottom: "fc6-3"
   bottom: "pts"
   top: "LandmarkLoss"
-  loss_weight: 1
+  loss_weight: 2
   python_param {
     module: "pythonLayer"
     layer:  "regression_Layer"

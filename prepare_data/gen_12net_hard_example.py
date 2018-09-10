@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../demo/')
 sys.path.append('.')
-sys.path.append('/home/cmcc/caffe-master/python')
+sys.path.append('~/libraries/caffe/python')
 import tools
 import caffe
 import cv2
@@ -36,10 +36,19 @@ def detectFace(img_path,threshold):
         out.append(out_)
     image_num = len(scales)
     rectangles = []
-    for i in range(image_num):    
-        cls_prob = out[i]['cls_score'][0][1]
+    for i in range(image_num):
+        # print(out[i]) 
+        #cls_prob = out[i]['cls_score'][0][1]
+        cls_prob = out[i]['prob1'][0][1]
+        #print("out!!!!")
+        
+        #print(out[i])
+        #print(out[i]['prob1'].shape)
+        #print(cls_prob.shape)
+        #print(cls_prob)
         roi      = out[i]['conv4-2'][0]
         out_h,out_w = cls_prob.shape
+        #print(cls_prob.shape)
         out_side = max(out_h,out_w)
         rectangle = tools.detect_face_12net(cls_prob,roi,out_side,1/scales[i],origin_w,origin_h,threshold[0])
         rectangles.extend(rectangle)
@@ -69,10 +78,12 @@ for annotation in annotations:
     bbox = map(float, annotation[1:])
     gts = np.array(bbox, dtype=np.float32).reshape(-1, 4)
     img_path = im_dir + annotation[0] + '.jpg'
+    #print(img_path)
     rectangles = detectFace(img_path,threshold)
     img = cv2.imread(img_path)
     image_idx += 1
     view_bar(image_idx,num)
+    #print(len(rectangles))
     for box in rectangles:
         x_left, y_top, x_right, y_bottom, _ = box
         crop_w = x_right - x_left + 1

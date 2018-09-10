@@ -168,7 +168,8 @@ def filter_face_48net(cls_prob,roi,pts,rectangles,width,height,threshold):
 	if cls_prob[i][1]>threshold:
 	    rect = [rectangles[i][0],rectangles[i][1],rectangles[i][2],rectangles[i][3],cls_prob[i][1],
 		   roi[i][0],roi[i][1],roi[i][2],roi[i][3],
-		   pts[i][0],pts[i][5],pts[i][1],pts[i][6],pts[i][2],pts[i][7],pts[i][3],pts[i][8],pts[i][4],pts[i][9]]
+		   #pts[i][0],pts[i][5],pts[i][1],pts[i][6],pts[i][2],pts[i][7],pts[i][3],pts[i][8],pts[i][4],pts[i][9]]
+           pts[i][0],pts[i][1],pts[i][2],pts[i][3],pts[i][4],pts[i][5],pts[i][6],pts[i][7],pts[i][8],pts[i][9],pts[i][10].pts[i][11]]
 	    boundingBox.append(rect)
     rectangles = NMS(boundingBox,0.7,'iom')
     rect = []
